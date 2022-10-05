@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .lnk{
+      @apply text-white m-3 text-lg hover:font-bold hover:text-gray-100 ease-out;
+    }
+}
