@@ -5,13 +5,14 @@
     import Icon from 'svelte-icons-pack/Icon.svelte';
     import BsCameraVideoOff from 'svelte-icons-pack/bs/BsCameraVideoOff';
     import BsPersonBoundingBox from 'svelte-icons-pack/bs/BsPersonBoundingBox';
+    
+    import {get} from "../lib/apiCall";
 
     let videoSource = "https://dr.sf-converter.com/download?id=9fa67ff14e16538bbf639362aef3131002b2f3dc187c90317635a8754ac84480&payload=1*eJzVVmuLo0gU%2FSuhoYtdaNO%2BysdAMdh5mthR8zKdL42P0lR8Rk1Metj%2FvqWZnZ2F%2BTILCzsQThWl917PPbcO%2BfJQ5efSx5syefj0cKjrovr0%2FNw0Tf%2BWn%2Buzh%2Ft%2Bnj43bu0fPl9QHG%2F0YK5iV48fnr5G6sFPB7rngOT%2FrFiWkGGYKmMylr9G%2BfUcXiKB4SOv6kd5HiX4QgKcdzm7XZG4N8%2F148%2F4WpASI06CqioqMi8DTNBWKJu3Uti8BOYg0kJFFb18YANSIJ7j%2BxzL96Hc5zkFkADljGZq47e3c2gKm%2BNiZKx1do51s9iro3Qt2sUgti4zUzVvJmtIgNRuhDiRBXf26CtbUOLTmX5IVSXohiuQHlChgTRFAvfID3gVpBn6ETv6kB6LEUw%2BMhyDtELumZ6VwRmkF5RSIAiCIkE8BCQjtd9kgVdUSIE8ZOlHFD5K1sz8kOl1ZIy0QHeHI8Z7%2BdhETbzSYa3H4FKUF8SBlKQYdZ1%2F5MdpIYKsQicr3wQ3l5kMr0Z2Dq1ysYRqXk1BRMqOhp%2FgDPG0fxKtH5xLxMlKX%2BEkkKQ14qAsqirtqMgqLK9A0J61OvCSSnUIL7TfHIgxLtyEXHCXMKR6IRrAcoIstJ2hW5kXJeAjZ%2FQCSu9UpSgsQU1fg1DgRIEHGQo%2F3vbsTt1uJ9dyq1HWbunSVt21p1kwoUCKFoIWqEZtYzuF2m5%2B06Y9LXyKbVPo0jaFLlmrA%2BVMsWVMF8qVImUJkr%2BqpYc2IG2hfSNtY9IuyaUtX7TJv5OIBpIIaRNh8H7VmqWtHzSrWsGXg0C81%2BVuxg7h6FRovq3WYys9hckLTPyctyee4Eh7jbzMoEEcYeGc8Gz3XvvebWoXIu8Xl%2BO6me62ZK1EgaRRlrX2KAzpD3QFzRNrz5S2YLRshgbER8uND3jo7avF27YoJzvCLrbu3AjWeiLcbp4jBKvXgW4PneQq7slhJLqed9rNpeXe%2BZjtPsZFEy2dOl805aa4Ts18sLHvBelV7i7jL32VBQm47a6i23YiOUHsEHYodSi3KLHdvPId3mdX7FDuUGlRblFQxQ5hh1KHcof3p%2Bqv6R2dWD%2FrHdQcoCpy%2FDfzkCXue%2FOQZEUVZF4V%2FwPzgP%2FKPO7D8H%2Bzj4jaxyw7ye7YEJhiqk7t7WWpvu%2FcZTCTbzmraZwZpaflmHdiY7PWyEg7T6xTYw5GrlW%2FyuZ4vTeVY45fxbmVGo4Tr6R4tF8y1h6%2Bj35kHs5x1RwLjOvNdBfazOSWRVaajIY64ZMNtk%2B7TRZAI3CYa07NY1AbCxbGfLPeWSs794ZBRP8L%2BFs8m2%2B542DA5reDlQ23cC1p38yjJnWCqXMYq2GP6S3y3gI3vXFJcBZUvd%2FMMCQ%2BcZPeth2833th3e8ZrleSrD489VbEfeoNSZHkNNFdy0qrHz797R5%2F%2FAlbDtNa*1659927127*3c56cac06c0b9313";
     let imgRecived = 'https://media.istockphoto.com/id/637696304/es/foto/pat%C3%A1n.webp?s=612x612&w=is&k=20&c=oqzChLS6ht3uaYyla1dY9RBbQPr9gYZkTu3TDHqNmXw=';
     let ws;
     let interval;
     
-    let number = 50;
     let isStreaming = false;
     
     const data = {}
@@ -54,6 +55,10 @@
         }
     }
     async function stream() {
+        var interv = 1000;
+        var gpu = await get('gpu');
+        if(gpu['gpu'])
+            interv = 250;
         ws = new WebSocket("ws://localhost:8000/ws");
         const video = await getCameraVideo();  
         let {width, height} = videoSource.srcObject.getTracks()[0].getSettings();
@@ -62,9 +67,9 @@
         ws.onmessage = function(event) {
             imgRecived = event.data;
         };
-        interval = setInterval(() => {
+        interv = setInterval(() => {
             streamVideo(video, context, canvas);
-        }, 1000);
+        }, interv);
     }
     function endConection(){
         isStreaming = false;
