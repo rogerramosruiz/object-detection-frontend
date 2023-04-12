@@ -18,12 +18,13 @@ cd object-detection-frontend
 npm install 
 ```
 
-Create a .env file, set VITE_API variable with the backend endpoint
+Create a .env file, set VITE_API variable with the backend endpoint and VITE_WS with the backned websocket endpont
 
 e.g
 
 ```
-VITE_API=http://localhost:8000
+VITE_API=http://localhost:8080
+VITE_WS=ws://localhost:8080
 ```
 
 ### Run
