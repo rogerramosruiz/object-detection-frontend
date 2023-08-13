@@ -48,7 +48,7 @@
   </div>
   <div class="col-span-2 m-5">
     {#if showResp}
-      <img src={file} alt="" height="600px">
+      <img src={file} alt="" width="450px" >
     {/if}
   </div>
 </div>

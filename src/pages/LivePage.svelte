@@ -56,7 +56,7 @@
         }
     }
     async function stream() {
-        var interv = 1000;
+        var interv = 1500;
         var gpu = await get('gpu');
         if(gpu['gpu'])
             interv = 250;
